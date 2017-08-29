@@ -1,0 +1,139 @@
+# 
+# 
+# DOCUMENTATION (please read it completely before proceed with config at bottom)
+# 
+# RecipeSearch was inspired on many recipes plugins as Craftipedia, RecipesGUI,
+# Essentials ("/recipe" command) and similar, bringing the best of each with
+# some original additional features as: localized item name searches supported
+# by client language files, inverse recipes search (with item as material),
+# recipes for held item, recipes for targeted block or entity, amongst others.
+# 
+# I hate to switch windows to search recipes online while i am playing. I was
+# an avid user of these plugins on my server and suggested many features but was
+# never heard, sadly those plugins are now dead so i wrote my own and i like to
+# share it with you.
+# 
+# I am not a java expert, i did the best i could, so this plugin could still
+# have some bugs (i warned you so i am not responsible for damages), so if you
+# are sure you found one please report it, ask your doubt or post your
+# suggestion at the project page:
+#
+# - https://dev.bukkit.org/projects/recipe-search
+# 
+# 
+# HOW TO GET LOCALIZED ITEM NAME SEARCH TO WORK
+# 
+# RecipeSearch supports localized item search by adding compatibility with
+# Minecraft client language files. It is designed that way so any server admin
+# could support his preferred language(s) just by extracting and copy (them) to
+# the plugin folder.
+# 
+# Some advantages of this are: customization, flexibility, stability throught
+# version changes, and the unconcern of no needing a dedicated dev staff to
+# generate language files. I am aware many similar plugins died due this (with
+# the additional consideration that i am a little lazy :D ).
+# 
+# 
+# LANGUAGE FILES INSTALLATION|UPDATING FROM MINECRAFT CLIENT
+# 
+# In this example i will show you how to install the "Espanol (Espana)" (es_es)
+# language file from Minecraft 1.12.1 windows client, however you can install
+# many versions of same language to cover the subtle differences beetween them:
+# 
+# - Open file "%APPDATA%\.minecraft\assets\indexes\<version>.json" with a text
+#   editor (for example my version is "1.12.1")
+# 
+# - Search for string "minecraft/lang/<lang>.lang" ("minecraft/lang/es_es.lang"
+#   in this case)
+# 
+# - Take note of the hash in the next line (mine is
+#   "ba31825a8666b744facf483538afd7a398408d05")
+# 
+# - Write down the first 2 letters of the hash ("ba" in this case)
+# 
+# - Go to the folder "%APPDATA%\.minecraft\assets\objects\<2 letters>
+#   (replace <> with the couple letters explained above)
+# 
+# - Locate the file named before the previously mentioned hash in that folder
+#   (i.e. "ba31825a8666b744facf483538afd7a398408d05")
+# 
+# - Copy the file and paste it in RecipeSearch plugin folder,
+#   i.e. "<bukkit folder>/plugins/RecipeSearch/"
+# 
+# - Rename the copied file to its supposed original name ("es_es.lang" in this
+#   example), note the ".lang" extension is important
+# 
+# - Repeat the process with other locales if you want, then restart or reload
+#   the server to apply changes
+# 
+# 
+# DEFAULT LANGUAGE FILE "en_us.lang" SPECIAL INSTALL|UPDATE
+# 
+# Now i will show you how to install the special case of "English (US)" (en_us)
+# language file, since it is not located in "assets" folder but included
+# directly inside game executable. You could also install it for players that
+# are used to english item names:
+# 
+# - Open the file "%APPDATA%\.minecraft\versions\<version>\<version>.jar" with a
+#   compression utility like 7-Zip, PeaZip, WinRar, WinZip or similar
+# 
+# - Inside file, browse to the folder "assets\minecraft\lang\"
+# 
+# - Locate the file "en_us.lang", extract it and copy to the plugin folder (in
+#   case of trouble you can also extract the entire .jar file to copy the file)
+# 
+# - Restart or reload the server to apply changes
+# 
+# 
+# PLUGIN PERMISSIONS
+# 
+# Ver.3 update: permissions are not allowed by default so i defaulted to true
+# if not set, that way you can use this plugin without install a permissions one
+# if you don't want to, also note permissions were negated in v2 but now are
+# restored how it should be, there are 6 permissions in RecipeSearch:
+# 
+# - recipesearch.search     : search item by typing partial name in chat cmd
+# - recipesearch.hand       : list recipes for item held in hand
+# - recipesearch.target     : list recipes for pointed block or entity
+# - recipesearch.list       : list search results, by keywords or by ingredient
+# - recipesearch.ingredient : search inverse recipes where item is an ingredient
+# - recipesearch.recipe     : display recipe in "virtual" workbench or furnace
+# 
+# 
+
+
+# PLUGIN CONFIGURATION (just some localized strings):
+
+
+# - item tooltip messages
+
+recipesCount: "%1$s recipes"
+ingredient: Ingredient
+pageNumber: Page %1$s
+current: Current
+CraftFurnaceRecipe: Furnace Recipe
+CraftShapedRecipe: Shaped Recipe
+CraftShapelessRecipe: Shapeless Recipe
+
+
+# - search items status messages
+
+noRecipesFound: No recipes found for the selected item, block or entity.
+noItemsFound: The keywords did not match any item.
+tooManyResults: Too many results, please refine your search.
+noPermission: Currently you have no permission to do that.
+
+
+# - multiline help page, 10 lines with 54 columns max recomended
+
+helpPage: |
+  RecipeSearch plugin help (commands: /recipe, /rc):
+  /rc <search keywords>: list items by partial names
+  /rc (h)and|(h)eld: list recipes for held item
+  /rc (t)arget|(v)iew: list recipes for object in view
+  * left click: list or show item recipe(s)
+  * right click: list recipes with item as material
+  * click outside: left click: home, right click: exit
+  Installed languages:%1$s. Your permissions:
+  %2$s
+  More: http://dev.bukkit.org/projects/recipe-search

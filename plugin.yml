@@ -1,0 +1,9 @@
+name: RecipeSearch
+main: cl.netgamer.recipesearch.Main
+version: 3
+
+commands:
+  rc:
+    description: "Show crafting recipes for items, help: /rc"
+    usage: /rc <search keywords> | hand | target
+    aliases: [recipe]
