@@ -112,7 +112,7 @@ public final class Main extends JavaPlugin implements Listener
 		// left click: continue, else get inverse recipes list and return (other slot types discarded above)
 		if (click != ClickType.LEFT)
 		{
-			if (hasPermission(player, "ingredient"))
+			if (allowed(player, "ingredient"))
 				inventorer.setItemList(player, reciper.getInverseRecipesFor(item), false);
 			return;
 		}
@@ -120,7 +120,7 @@ public final class Main extends JavaPlugin implements Listener
 		// show recipe shape: if upper inventory is not empty then bottom have a recipes list
 		if (slot == SlotType.CONTAINER && inventorer.isShowingRecipe(player))
 		{
-			if (hasPermission(player, "recipe"))
+			if (allowed(player, "recipe"))
 				inventorer.showRecipe(player, reciper.getRecipe(item, e.getSlot()-9), false);
 			return;
 		}
@@ -129,7 +129,7 @@ public final class Main extends JavaPlugin implements Listener
 		List<ItemStack> recipes = reciper.getRecipesFor(item);
 		if (recipes != null && recipes.size() > 0)
 		{
-			if (!hasPermission(player, "list"))
+			if (!allowed(player, "list"))
 				return;
 			inventorer.listRecipes(player, recipes);
 			inventorer.showRecipe(player, reciper.getRecipe(item, 0), false);
@@ -170,14 +170,14 @@ public final class Main extends JavaPlugin implements Listener
 		{
 		case "hand1":
 		case "h1":
-			if (!hasPermissionMsg(player, "hand"))
+			if (!allowedMsg(player, "hand"))
 				return false;
 			if (!nearItem.containsKey(playerId))
 				nearItem.put(playerId, player.getInventory().getItemInMainHand());
 			return searchNearItemRecipes(player);
 		case "target1":
 		case "t1":
-			if (!hasPermissionMsg(player, "target"))
+			if (!allowedMsg(player, "target"))
 				return false;
 			if (!nearItem.containsKey(playerId))
 				nearItem.put(playerId, sight.getTargetItem(player));
@@ -186,7 +186,7 @@ public final class Main extends JavaPlugin implements Listener
 		
 		// reserved words passed, take args as search terms, check list permission before
 		nearItem.remove(player.getUniqueId().toString());
-		if (!hasPermissionMsg(player, "nosearch"))
+		if (!allowedMsg(player, "nosearch"))
 			return false;
 		
 		int listSize = inventorer.setItemList(player, dictionary.searchItemsByName(args), true);
@@ -208,7 +208,7 @@ public final class Main extends JavaPlugin implements Listener
 		
 		// search recipes with item as result
 		List<ItemStack> items = reciper.getRecipesFor(item);
-		if (items != null && !items.isEmpty() && hasPermission(player, "list"))
+		if (items != null && !items.isEmpty() && allowed(player, "list"))
 		{
 			inventorer.listRecipes(player, items);
 			inventorer.showRecipe(player, reciper.getRecipe(item, 0), true);
@@ -219,18 +219,18 @@ public final class Main extends JavaPlugin implements Listener
 		items = reciper.getInverseRecipesFor(item);
 		if (items != null && !items.isEmpty())
 		{
-			if (!hasPermissionMsg(player, "ingredient"))
+			if (!allowedMsg(player, "ingredient"))
 				return false;
 			inventorer.setItemList(player, items, false);
 			return true;
 		}
 		
 		// previous permission check now displaying message
-		if (!hasPermissionMsg(player, "list"))
+		if (!allowedMsg(player, "list"))
 			return false;
 		
 		// no recipe found for specific item
-		player.sendMessage(msg("recipesFound"));
+		player.sendMessage(msg("noRecipesFound"));
 		nearItem.remove(player.getUniqueId().toString());
 		return false;
 	}
@@ -241,12 +241,12 @@ public final class Main extends JavaPlugin implements Listener
 		if (!(sender instanceof Player))
 			return msg("needsMinecraftClient");
 		Player player = (Player)sender;
-		String perms = hasPermission(player, "search") ? " +search" : " -search";
-		perms += hasPermission(player, "hand") ? " +hand" : " -hand";
-		perms += hasPermission(player, "target") ? " +target" : " -target";
-		perms += hasPermission(player, "list") ? " +list" : " -list";
-		perms += hasPermission(player, "ingredient") ? " +ingredient" : " -ingredient";
-		perms += hasPermission(player, "recipe") ? " +recipe" : " -recipe";
+		String perms = allowed(player, "search") ? " +search" : " -search";
+		perms += allowed(player, "hand") ? " +hand" : " -hand";
+		perms += allowed(player, "target") ? " +target" : " -target";
+		perms += allowed(player, "list") ? " +list" : " -list";
+		perms += allowed(player, "ingredient") ? " +ingredient" : " -ingredient";
+		perms += allowed(player, "recipe") ? " +recipe" : " -recipe";
 		return perms;
 	}
 	
@@ -254,7 +254,7 @@ public final class Main extends JavaPlugin implements Listener
 	// next methods are utility ones, mainly for comfort, readability and isolate methods
 	
 	
-	private boolean hasPermission(Player player, String permission)
+	private boolean allowed(Player player, String permission)
 	{
 		if (!player.isPermissionSet("recipesearch."+permission))
 			return true;
@@ -262,9 +262,9 @@ public final class Main extends JavaPlugin implements Listener
 	}
 	
 	
-	private boolean hasPermissionMsg(Player player, String permission)
+	private boolean allowedMsg(Player player, String permission)
 	{
-		if (!hasPermission(player, permission))
+		if (!allowed(player, permission))
 		{
 			player.sendMessage(msg("noPermission"));
 			return false;

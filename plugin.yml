@@ -1,6 +1,6 @@
 name: RecipeSearch
 main: cl.netgamer.recipesearch.Main
-version: 3
+version: 4
 
 commands:
   rc:
